@@ -20,7 +20,7 @@ if ($functionsAppEnvironment -eq $null) {
     $functionsAppEnvironment=$pomXml.project.properties.targetEnvironment
 }
 $functionsAppName=$functionsNamePrefix+$functionsAppVersion+"-"+$cloudLocation+"-$resourceType-"+$functionsAppEnvironment
-$functionsResourceGroupName="ssmyapp-"+$cloudLocation+"-rg-"+$functionsAppEnvironment
+$functionsResourceGroupName="myapp-"+$cloudLocation+"-rg-"+$functionsAppEnvironment
 #------------------------------------------------------------------------------------------------------------
 
 # ******************************* prepare arm teplate parameter files ***************************************
