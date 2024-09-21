@@ -1,4 +1,4 @@
-name: Build and deploy code to Azure Functions - Dev
+name: Dev > Build and deploy code to Azure Functions
 
 on:
   workflow_dispatch:
