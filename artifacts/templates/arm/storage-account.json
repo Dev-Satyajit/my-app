@@ -1,0 +1,41 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"storage_account_name": {
+			"type": "string",
+			"metadata": {
+				"description": "The name of the storage that you wish to create."
+			}
+		},
+		"account_type": {
+			"type": "string",
+			"metadata": {
+				"description": "Storage Account type"
+			}
+		},
+		"account_kind": {
+			"type": "string",
+			"metadata": {
+				"description": "Storage Account kind"
+			}
+		}
+	},
+	"resources": [
+		{
+			"apiVersion": "2018-07-01",
+			"type": "Microsoft.Storage/storageAccounts",
+			"name": "[parameters('storage_account_name')]",
+			"location": "[resourceGroup().location]",
+			"kind": "[parameters('account_kind')]",
+			"tags": {},
+			"sku": {
+				"name": "[parameters('account_type')]"
+			},
+			"properties": {
+				"supportsHttpsTrafficOnly": true,
+				"defaultToOAuthAuthentication": true
+			}
+		}
+	]
+}

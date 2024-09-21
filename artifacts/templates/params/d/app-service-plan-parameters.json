@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"app_service_plan_name": {
+			"value": "ssapps-$(TARGET_APP_SERVICE_LOCATION)-asp-$(TARGET_APP_SERVICE_ENVIRONMENT)"
+		},
+		"sku": {
+			"value": "Dynamic"
+		},
+		"sku_code": {
+			"value": "Y1"
+		},
+		"worker_size": {
+			"value": "0"
+		},
+		"worker_size_id": {
+			"value": "0"
+		},
+		"number_of_workers": {
+			"value": "1"
+		}
+	}
+}
