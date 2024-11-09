@@ -1,4 +1,4 @@
-package com.ssinha.testapp.function;
+package com.ssinha.myapp.function;
 
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.annotation.EventHubTrigger;
