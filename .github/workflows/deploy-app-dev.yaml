@@ -92,16 +92,16 @@ jobs:
           parameters: ./artifacts/templates/params/d/function-app-parameters.json.tmp
 
       - name: Key Vault Integration
-        uses: azure/cli@v2
+        uses: azure/powershell@v2
         with:
-          azcliversion: latest
+          azPSVersion: "latest"
           inlineScript: ./artifacts/scripts/actions/Function_IntegrateKeyVault.ps1 ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENVIRONMENT_DEV }}
 
       - name: App Settings
-        uses: azure/cli@v2
+        uses: azure/powershell@v2
         with:
-          azcliversion: latest
-          inlineScript: ./artifacts/scripts/actions/Function_AddAppSettings.ps1 ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} "test.key=160|245|395"
+          azPSVersion: "latest"
+          inlineScript: ./artifacts/scripts/actions/Function_AddAppSettings.ps1 ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} "test.key=160|245|395,test_key2=76/7"
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
