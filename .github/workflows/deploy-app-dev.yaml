@@ -64,6 +64,13 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+
+    steps:
       - name: Azure Login
         uses: Azure/login@v1
         with:
@@ -107,13 +114,6 @@ jobs:
             "test.key=160|245|395,test_key2=76/7,
             xvalue=1100"
 
-  deploy:
-    needs: [build]
-    runs-on: ubuntu-latest
-    environment:
-      name: dev
-
-    steps:
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa-dev
