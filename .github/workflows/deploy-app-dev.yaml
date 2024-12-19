@@ -92,13 +92,16 @@ jobs:
           parameters: ./artifacts/templates/params/d/function-app-parameters.json.tmp
 
       - name: Key Vault Integration
-        run: ./artifacts/scripts/actions/Function_IntegrateKeyVault.ps1 ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENVIRONMENT_DEV }}
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: ./artifacts/scripts/actions/Function_IntegrateKeyVault.ps1 ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENVIRONMENT_DEV }}
 
       - name: App Settings
-        run: ./artifacts/scripts/actions/Function_AddAppSettings.ps1 ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} "test.key=160|245|395"
-
-      - name: Wait - Stability Check
-        run: Start-Sleep -Seconds 15
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: ./artifacts/scripts/actions/Function_AddAppSettings.ps1 ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} "test.key=160|245|395"
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
@@ -108,7 +111,3 @@ jobs:
           package: ${{ env.PACKAGE_DIRECTORY }}
       #   publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           respect-pom-xml: true
-
-      - name: Wait - Stability Check
-        shell: pwsh
-        run: Start-Sleep -Seconds 30
