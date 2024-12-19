@@ -1,6 +1,4 @@
 trigger:
-  - develop
-  - feature*
   - drop*
   - stage
   - main
