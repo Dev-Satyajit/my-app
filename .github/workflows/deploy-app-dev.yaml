@@ -89,7 +89,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }}
-          template: ./artifacts/templates/arm/function-app.json  `
+          template: ./artifacts/templates/arm/function-app.json
           parameters: ./artifacts/templates/params/d/function-app-parameters.json.tmp
 
       - name: Key Vault Integration
