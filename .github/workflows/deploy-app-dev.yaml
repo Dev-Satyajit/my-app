@@ -7,6 +7,16 @@ on:
         description: 'Branch to deploy from'
         required: true
         default: 'develop'
+      create-storage-account:
+        description: 'Create storage account?'
+        required: true
+        type: choice
+        options: ['true', 'false']
+      create-function-app:
+        description: 'Create function app?'
+        required: true
+        type: choice
+        options: ['true', 'false']
 
 env:
   # AZURE_FUNCTIONAPP_NAME: 'your-app-name' # set this to your function app name on Azure
@@ -78,6 +88,7 @@ jobs:
           inlineScript: ./artifacts/scripts/actions/Common_SetupReleaseVariables.ps1 ${{ vars.ENVIRONMENT_DEV }} ${{ vars.LOCATION }} ${{ vars.FUNC_MYAPP_NAME }} .
 
       - name: Storage Account Deploy
+        if: "contains(create-storage-account, 'true')"
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
@@ -86,6 +97,7 @@ jobs:
           parameters: ./artifacts/templates/params/d/storage-account-parameters.json.tmp
 
       - name: Function App Deploy
+        if: "contains(create-function-app, 'true')"
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
