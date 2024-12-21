@@ -26,7 +26,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     environment:
       name: dev
 
@@ -113,7 +113,6 @@ jobs:
             ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENVIRONMENT_DEV }}
 
       - name: App Settings
-        if: ${{ inputs.create-function-app == 'Yes' }}
         uses: azure/powershell@v2
         with:
           azPSVersion: "latest"
