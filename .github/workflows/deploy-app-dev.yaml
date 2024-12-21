@@ -106,6 +106,7 @@ jobs:
           parameters: ./artifacts/templates/params/d/function-app-parameters.json.tmp
 
       - name: Key Vault Integration
+        if: ${{ inputs.create-function-app == 'true' }}
         uses: azure/powershell@v2
         with:
           azPSVersion: "latest"
@@ -113,6 +114,7 @@ jobs:
             ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENVIRONMENT_DEV }}
 
       - name: App Settings
+        if: ${{ inputs.create-function-app == 'true' }}
         uses: azure/powershell@v2
         with:
           azPSVersion: "latest"
