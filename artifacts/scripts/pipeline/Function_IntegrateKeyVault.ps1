@@ -6,8 +6,8 @@ param (
 
 $secretName = "myapp-secret"
 
-$keyvaultname = "ssappsprv-uw-kv-"+$NetworkEnvionment
-$keyvaultRg = 'common-uw-rg-'+$NetworkEnvionment
+$keyvaultname = "ssappspub-uw-kv-"+$NetworkEnvionment
+$keyvaultRg = 'common-ci-rg-'+$NetworkEnvionment
 
 $secretId = az keyvault secret show -n $secretName --vault-name $keyvaultname --query "id" -o tsv
 $principalId = az functionapp identity show -n $AppName -g $AppResourceGroupName --query principalId -o tsv
