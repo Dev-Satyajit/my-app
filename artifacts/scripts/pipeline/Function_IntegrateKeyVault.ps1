@@ -6,7 +6,7 @@ param (
 
 $secretName = "myapp-secret"
 
-$keyvaultname = "ssappspub-uw-kv-"+$NetworkEnvionment
+$keyvaultname = "ssappspub-ci-kv-"+$NetworkEnvionment
 $keyvaultRg = 'common-ci-rg-'+$NetworkEnvionment
 
 $secretId = az keyvault secret show -n $secretName --vault-name $keyvaultname --query "id" -o tsv
