@@ -104,7 +104,7 @@ jobs:
         uses: azure/powershell@v2
         with:
           azPSVersion: "latest"
-          inlineScript: ./artifacts/scripts/actions/Common_SetupReleaseVariables.ps1 ${{ vars.ENVIRONMENT_DEV }} ${{ vars.ENVIRONMENT_DEV }} ${{ vars.LOCATION }} ${{ vars.FUNC_MYAPP_NAME }} .
+          inlineScript: ./artifacts/scripts/actions/Common_SetupReleaseVariables.ps1 ${{ vars.ENV_IDENTIFIER }} ${{ vars.ENV_NETWORK_IDENTIFIER }} ${{ vars.CLOUD_LOCATION }} ${{ vars.FUNC_MYAPP_NAME }} .
 
       - name: App Service Plan Deploy
         if: inputs.create-asp == 'Yes'
@@ -147,9 +147,7 @@ jobs:
         with:
           azPSVersion: "latest"
           inlineScript: ./artifacts/scripts/actions/Function_AddAppSettings.ps1
-            ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }}
-            "test.key=160|245|395,test_key2=76/7,
-            xvalue=1100"
+            ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.COMMA_SEPARATED_VALUE }}
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
