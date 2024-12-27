@@ -1,0 +1,185 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"function_app_name": {
+			"type": "string",
+			"metadata": {
+				"description": "The name of the function app that you wish to create."
+			}
+		},
+		"app_insights_name": {
+			"type": "string",
+			"metadata": {
+				"description": "The created name of the app insight."
+			}
+		},
+		"app_service_plan_name": {
+			"type": "string",
+			"metadata": {
+				"description": "The created name of the app service plan."
+			}
+		},
+		"storage_account_name": {
+			"type": "string",
+			"metadata": {
+				"description": "Created name of the storage account."
+			}
+		},
+		"function_worker_runtime": {
+			"type": "string",
+			"metadata": {
+				"description": "The language worker runtime to load in the function app."
+			}
+		},
+		"app_service_resource_group_name": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the App Service Group"
+			}
+		},
+		"workspace_name": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the App Service Group"
+			}
+		},
+		"workspace_resource_group_name": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the App Service Group"
+			}
+		},
+		"environment": {
+			"type": "string",
+			"metadata": {
+				"description": "Application Environment"
+			}
+		},
+		"ENVIRONMENT_NAME": {
+			"type": "string",
+			"metadata": {
+				"description": "Application Environment"
+			}
+		},
+		"application_backend_canned_mode": {
+			"type": "string",
+			"metadata": {
+				"description": "Created Redis Cache Name"
+			}
+		},
+		"application_version": {
+			"type": "string",
+			"metadata": {
+				"description": "The code version of the application"
+			}
+		},
+		"application_runtime_environment": {
+			"type": "string",
+			"metadata": {
+				"description": "Environment where the code is running"
+			}
+		},
+		"linuxFxVersion": {
+			"type": "string",
+			"metadata": {
+				"description": "Java version for the function app"
+			}
+		}
+	},
+	"variables": {
+		"contentShare": "myappfileshare",
+		"storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', parameters('storage_account_name'))]",
+		"appServicePlanId": "[resourceId(parameters('app_service_resource_group_name') ,'Microsoft.Web/serverfarms',parameters('app_service_plan_name'))]",
+		"workspaceResourceId": "[resourceId(parameters('workspace_resource_group_name') ,'Microsoft.OperationalInsights/workspaces',parameters('workspace_name'))]"
+	},
+	"resources": [
+		{
+			"apiVersion": "2020-02-02-preview",
+			"name": "[parameters('app_insights_name')]",
+			"type": "Microsoft.Insights/components",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"ApplicationId": "[parameters('app_insights_name')]",
+				"WorkspaceResourceId": "[variables('workspaceResourceId')]"
+			},
+			"tags": {
+				"creator": "Satyajit Sinha",
+				"environment": "[parameters('environment')]"
+			}
+		},
+		{
+			"type": "Microsoft.Web/sites",
+			"apiVersion": "2018-11-01",
+			"name": "[parameters('function_app_name')]",
+			"location": "[resourceGroup().location]",
+			"kind": "functionapp,linux",
+			"identity": {
+				"type": "SystemAssigned"
+			},
+			"tags": {
+				"creator": "Satyajit Sinha",
+				"environment": "[parameters('environment')]"
+			},
+			"properties": {
+				"httpsOnly": true,
+				"serverFarmId": "[variables('appServicePlanId')]",
+				"clientAffinityEnabled": false,
+				"virtualNetworkSubnetId": null,
+				"publicNetworkAccess": "Enabled",
+				"siteConfig": {
+					"netFrameworkVersion": "v6.0",
+					"siteAuthEnabled": true,
+					"linuxFxVersion": "[parameters('linuxFxVersion')]",
+					"appSettings": [
+						{
+							"name": "AzureWebJobsStorage",
+							"value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storage_account_name'),';AccountKey=',listKeys(variables('storageAccountid'),'2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+						},
+						{
+							"name": "env.name",
+							"value": "[parameters('ENVIRONMENT_NAME')]"
+						},
+						{
+							"name": "FUNCTIONS_EXTENSION_VERSION",
+							"value": "~4"
+						},
+						{
+							"name": "WEBSITE_NODE_DEFAULT_VERSION",
+							"value": "10.14.1"
+						},
+						{
+							"name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+							"value": "[reference(concat('microsoft.insights/components/', parameters('app_insights_name'))).InstrumentationKey]"
+						},
+						{
+							"name": "FUNCTIONS_WORKER_RUNTIME",
+							"value": "[parameters('function_worker_runtime')]"
+						},
+						{
+							"name": "runtime.application.version",
+							"value": "[parameters('application_version')]"
+						},
+						{
+							"name": "runtime.environment",
+							"value": "[parameters('application_runtime_environment')]"
+						},
+						{
+						    "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+						    "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storage_account_name'),';AccountKey=',listKeys(variables('storageAccountid'),'2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+						},
+						{
+						    "name": "WEBSITE_CONTENTSHARE",
+						    "value": "[variables('contentShare')]"
+						}
+					],
+					"cors": {
+						"allowedOrigins": [
+							"https://portal.azure.com"
+						]
+					}
+				}
+			}
+		}
+	]
+}

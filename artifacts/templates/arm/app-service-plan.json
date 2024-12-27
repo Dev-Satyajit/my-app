@@ -1,0 +1,45 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"app_service_plan_name": {
+			"type": "string"
+		},
+		"sku": {
+			"type": "string"
+		},
+		"sku_code": {
+			"type": "string"
+		},
+		"worker_size": {
+			"type": "string"
+		},
+		"worker_size_id": {
+			"type": "string"
+		},
+		"number_of_workers": {
+			"type": "string"
+		}
+	},
+	"resources": [
+		{
+			"apiVersion": "2018-11-01",
+			"name": "[parameters('app_service_plan_name')]",
+			"type": "Microsoft.Web/serverfarms",
+			"location": "[resourceGroup().location]",
+			"kind": "linux",
+			"tags": {},
+			"dependsOn": [],
+			"properties": {
+				"name": "[parameters('app_service_plan_name')]",
+				"workerSize": "[parameters('worker_size')]",
+				"workerSizeId": "[parameters('worker_size_id')]",
+				"numberOfWorkers": "[parameters('number_of_workers')]"
+			},
+			"sku": {
+				"Tier": "[parameters('sku')]",
+				"Name": "[parameters('sku_code')]"
+			}
+		}
+	]
+}

@@ -1,0 +1,40 @@
+trigger:
+  - feature*
+  - develop
+  - drop*
+  - stage
+  - main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+  - task: Maven@4
+    displayName: '01 || Build Maven'
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'clean package'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.17'
+      mavenVersionOption: 'Default'
+      mavenAuthenticateFeed: false
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
+
+  - task: CopyFiles@2
+    displayName: '02 || Copy Files'
+    inputs:
+      SourceFolder: $(System.DefaultWorkingDirectory)
+      Contents: |
+        **/artifacts/**
+        **/azure-functions/**
+        pom.xml
+      TargetFolder: $(Build.ArtifactStagingDirectory)
+      OverWrite: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: '03 || Publish Build Artifacts'
+    inputs:
+      PathtoPublish: $(Build.ArtifactStagingDirectory)
