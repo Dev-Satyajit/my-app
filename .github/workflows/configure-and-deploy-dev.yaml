@@ -111,7 +111,7 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
-          resourceGroupName: common-${{ vars.LOCATION }}-rg-${{ vars.ENVIRONMENT_DEV }}
+          resourceGroupName: common-${{ vars.LOCATION }}-rg-${{ vars.ENV_IDENTIFIER }}
           template: ./artifacts/templates/arm/app-service-plan.json
           parameters: ./artifacts/templates/params/d/app-service-plan-parameters.json.tmp
 
@@ -139,7 +139,7 @@ jobs:
         with:
           azPSVersion: "latest"
           inlineScript: ./artifacts/scripts/actions/Function_IntegrateKeyVault.ps1
-            ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENVIRONMENT_DEV }}
+            ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENV_IDENTIFIER }}
 
       - name: App Settings
         if: inputs.configure-function-app == 'Yes'
