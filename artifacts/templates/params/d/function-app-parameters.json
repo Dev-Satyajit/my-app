@@ -36,11 +36,11 @@
         },
 		"workspace_name": {
 		    "type": "string",
-		    "value": "digitalengineering-$(TARGET_APP_SERVICE_LOCATION)-law-$(TARGET_APP_SERVICE_ENVIRONMENT)"
+		    "value": "digitalengineering-$(TARGET_APP_SERVICE_LOCATION)-law-$(TARGET_NETWORK_ENVIRONMENT)"
 		},
 		"workspace_resource_group_name": {
 		    "type": "string",
-		    "value": "common-$(TARGET_APP_SERVICE_LOCATION)-rg-$(TARGET_APP_SERVICE_ENVIRONMENT)"
+		    "value": "common-$(TARGET_APP_SERVICE_LOCATION)-rg-$(TARGET_NETWORK_ENVIRONMENT)"
 		},
         "application_backend_canned_mode": {
             "type": "string",
