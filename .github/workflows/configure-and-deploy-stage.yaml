@@ -111,7 +111,7 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
-          resourceGroupName: common-${{ vars.LOCATION }}-rg-${{ vars.ENV_IDENTIFIER }}
+          resourceGroupName: common-${{ vars.CLOUD_LOCATION }}-rg-${{ vars.ENV_IDENTIFIER }}
           template: ./artifacts/templates/arm/app-service-plan.json
           parameters: ./artifacts/templates/params/r/app-service-plan-parameters.json.tmp
 
