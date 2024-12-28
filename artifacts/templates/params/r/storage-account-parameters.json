@@ -1,0 +1,19 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"storage_account_name": {
+			"type": "string",
+			"value": "ssmyapp$(TARGET_APP_SERVICE_VERSION)$(TARGET_APP_SERVICE_LOCATION)$(TARGET_APP_SERVICE_ENVIRONMENT)"
+		},
+		"account_type": {
+			"type": "string",
+			"value": "Standard_LRS"
+		},
+		"account_kind": {
+			"type": "string",
+			"value": "StorageV2"
+		}
+	},
+	"resources": []
+}
