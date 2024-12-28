@@ -139,7 +139,7 @@ jobs:
         with:
           azPSVersion: "latest"
           inlineScript: ./artifacts/scripts/actions/Function_IntegrateKeyVault.ps1
-            ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENV_IDENTIFIER }}
+            ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENV_IDENTIFIER }} ${{ vars.ENV_NETWORK_IDENTIFIER }}
 
       - name: App Settings
         if: inputs.configure-function-app == 'Yes'

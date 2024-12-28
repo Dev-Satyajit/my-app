@@ -1,10 +1,11 @@
 param (
    $AppResourceGroupName,
    $AppName,
+   $Envionment,
    $NetworkEnvionment
 )
 
-$secretName = "myapp-secret"
+$secretName = $Envionment+"-myapp-secret"
 
 $keyvaultname = "ssappspub-ci-kv-"+$NetworkEnvionment
 $keyvaultRg = 'common-ci-rg-'+$NetworkEnvionment
