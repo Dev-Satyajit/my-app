@@ -27,7 +27,7 @@
 			"name": "[parameters('app_service_plan_name')]",
 			"type": "Microsoft.Web/serverfarms",
 			"location": "[resourceGroup().location]",
-			"kind": "linux",
+			"kind": "",
 			"tags": {},
 			"dependsOn": [],
 			"properties": {

@@ -1,0 +1,64 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment": {
+            "type": "string",
+            "value": "$(TARGET_APP_SERVICE_ENVIRONMENT)"
+        },
+		"ENVIRONMENT_NAME": {
+			"type": "string",
+			"value": "develop"
+		},
+        "storage_account_name": {
+            "type": "string",
+            "value": "ssmyapp$(TARGET_APP_SERVICE_VERSION)$(TARGET_APP_SERVICE_LOCATION)$(TARGET_APP_SERVICE_ENVIRONMENT)"
+        },
+        "function_app_name": {
+            "type": "string",
+            "value": "$(TARGET_APP_SERVICE_NAME)"
+        },
+        "app_insights_name": {
+            "type": "string",
+            "value": "ssmyapp$(TARGET_APP_SERVICE_VERSION)-$(TARGET_APP_SERVICE_LOCATION)-ai-$(TARGET_APP_SERVICE_ENVIRONMENT)"
+        },
+        "app_service_plan_name": {
+            "type": "string",
+            "value": "ASP-myappcirgd-be63"
+        },
+        "function_worker_runtime": {
+            "type": "string",
+            "value": "java"
+        },
+        "app_service_resource_group_name": {
+            "type": "string",
+            "value": "myapp-$(TARGET_APP_SERVICE_LOCATION)-rg-$(TARGET_APP_SERVICE_ENVIRONMENT)"
+        },
+		"workspace_name": {
+		    "type": "string",
+		    "value": "digitalengineering-$(TARGET_APP_SERVICE_LOCATION)-law-$(TARGET_APP_SERVICE_ENVIRONMENT)"
+		},
+		"workspace_resource_group_name": {
+		    "type": "string",
+		    "value": "common-$(TARGET_APP_SERVICE_LOCATION)-rg-$(TARGET_APP_SERVICE_ENVIRONMENT)"
+		},
+        "application_backend_canned_mode": {
+            "type": "string",
+            "value": "false"
+        },
+        "application_version": {
+            "type": "string",
+            "value": "$(TARGET_CODE_VERSION)"
+        },
+        "application_runtime_environment": {
+            "type": "string",
+            "value": "$(TARGET_APP_SERVICE_ENVIRONMENT)"
+        },
+		"linuxFxVersion": {
+			"type": "string",
+			"value": "Java|17"
+		}
+    },
+    "resources": [
+    ]
+}
