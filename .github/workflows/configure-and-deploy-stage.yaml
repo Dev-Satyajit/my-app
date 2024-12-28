@@ -1,4 +1,4 @@
-name: Dev > Configure, build and deploy to Azure Functions
+name: Stage > Configure, build and deploy to Azure Functions
 
 on:
   workflow_dispatch:
