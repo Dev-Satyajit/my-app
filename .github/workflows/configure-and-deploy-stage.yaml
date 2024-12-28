@@ -113,7 +113,7 @@ jobs:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
           resourceGroupName: common-${{ vars.LOCATION }}-rg-${{ vars.ENV_IDENTIFIER }}
           template: ./artifacts/templates/arm/app-service-plan.json
-          parameters: ./artifacts/templates/params/d/app-service-plan-parameters.json.tmp
+          parameters: ./artifacts/templates/params/r/app-service-plan-parameters.json.tmp
 
       - name: Storage Account Deploy
         if: inputs.configure-function-app == 'Yes'
@@ -122,7 +122,7 @@ jobs:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }}
           template: ./artifacts/templates/arm/storage-account.json
-          parameters: ./artifacts/templates/params/d/storage-account-parameters.json.tmp
+          parameters: ./artifacts/templates/params/r/storage-account-parameters.json.tmp
 
       - name: Function App Deploy
         if: inputs.configure-function-app == 'Yes'
@@ -131,7 +131,7 @@ jobs:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }}
           template: ./artifacts/templates/arm/function-app.json
-          parameters: ./artifacts/templates/params/d/function-app-parameters.json.tmp
+          parameters: ./artifacts/templates/params/r/function-app-parameters.json.tmp
 
       - name: Key Vault Integration
         if: inputs.configure-function-app == 'Yes'
