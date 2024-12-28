@@ -1,0 +1,159 @@
+name: Dev > Configure, build and deploy to Azure Functions
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy from'
+        required: true
+        default: 'stage'
+      create-asp:
+        description: 'Create ASP?'
+        required: true
+        type: choice
+        options: ['No', 'Yes']
+      configure-function-app:
+        description: 'Configure function app?'
+        required: true
+        type: choice
+        options: ['Yes', 'No']
+
+env:
+  # AZURE_FUNCTIONAPP_NAME: 'your-app-name' # set this to your function app name on Azure
+  PACKAGE_DIRECTORY: '.' # set this to the directory which contains pom.xml file
+  DISTRIBUTION: 'adopt' # set this to the java version to use
+  JAVA_VERSION: '17' # set this to the java version to use
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: ${{ env.DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Check Infrastructure Change
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            $files=$(git diff HEAD HEAD~ --name-only)
+            $temp=$files -split ' '
+            $count=$temp.Length
+            echo "Total changed $count files"
+            For ($i=0; $i -lt $temp.Length; $i++)
+            {
+              $name=$temp[$i]
+              echo "this is $name file"
+              if ($name -like "artifacts/templates/*" -OR $name -contains "pom.xml")
+              {
+                Write-Host "##vso[task.setvariable variable=infrastructure_changed]True"
+                New-Item -Path 'infrastructure_changed.txt' -ItemType File -Force
+                Get-ChildItem -Recurse infrastructure_changed.txt | Format-Table FullName 
+              }
+            }
+
+      - name: Build Maven
+        run: mvn clean package
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: |
+            **/artifacts/**
+            **/azure-functions/**
+            infrastructure_changed.txt
+            pom.xml
+
+      - name: Get Current Date
+        run: echo "date=$(date +'%Y%m%d/%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ env.date }}
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment:
+      name: stage
+
+    steps:
+      - name: Download Artifact 
+        uses: actions/download-artifact@v4
+        with:
+          name: my-artifact
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZ_CREDENTIALS }}
+
+      - name: Pre Release Setup
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: ./artifacts/scripts/actions/Common_SetupReleaseVariables.ps1 ${{ vars.ENV_IDENTIFIER }} ${{ vars.ENV_NETWORK_IDENTIFIER }} ${{ vars.CLOUD_LOCATION }} ${{ vars.FUNC_MYAPP_NAME }} .
+
+      - name: App Service Plan Deploy
+        if: inputs.create-asp == 'Yes'
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+          resourceGroupName: common-${{ vars.LOCATION }}-rg-${{ vars.ENV_IDENTIFIER }}
+          template: ./artifacts/templates/arm/app-service-plan.json
+          parameters: ./artifacts/templates/params/d/app-service-plan-parameters.json.tmp
+
+      - name: Storage Account Deploy
+        if: inputs.configure-function-app == 'Yes'
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }}
+          template: ./artifacts/templates/arm/storage-account.json
+          parameters: ./artifacts/templates/params/d/storage-account-parameters.json.tmp
+
+      - name: Function App Deploy
+        if: inputs.configure-function-app == 'Yes'
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }}
+          template: ./artifacts/templates/arm/function-app.json
+          parameters: ./artifacts/templates/params/d/function-app-parameters.json.tmp
+
+      - name: Key Vault Integration
+        if: inputs.configure-function-app == 'Yes'
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: ./artifacts/scripts/actions/Function_IntegrateKeyVault.ps1
+            ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.ENV_IDENTIFIER }}
+
+      - name: App Settings
+        if: inputs.configure-function-app == 'Yes'
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: ./artifacts/scripts/actions/Function_AddAppSettings.ps1
+            ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.COMMA_SEPARATED_VALUE }}
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa-dev
+        with:
+          app-name: ${{ env.TARGET_APP_SERVICE_NAME }}
+          package: ${{ env.PACKAGE_DIRECTORY }}
+          # publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          respect-pom-xml: true
