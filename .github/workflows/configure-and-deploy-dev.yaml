@@ -31,35 +31,12 @@ jobs:
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
 
       - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           distribution: ${{ env.DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Check Infrastructure Change
-        uses: azure/powershell@v2
-        with:
-          azPSVersion: "latest"
-          inlineScript: |
-            $files=$(git diff HEAD HEAD~ --name-only)
-            $temp=$files -split ' '
-            $count=$temp.Length
-            echo "Total changed $count files"
-            For ($i=0; $i -lt $temp.Length; $i++)
-            {
-              $name=$temp[$i]
-              echo "this is $name file"
-              if ($name -like "artifacts/templates/*" -OR $name -contains "pom.xml")
-              {
-                Write-Host "##vso[task.setvariable variable=infrastructure_changed]True"
-                New-Item -Path 'infrastructure_changed.txt' -ItemType File -Force
-                Get-ChildItem -Recurse infrastructure_changed.txt | Format-Table FullName 
-              }
-            }
 
       - name: Build Maven
         run: mvn clean package
