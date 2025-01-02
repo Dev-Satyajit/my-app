@@ -14,7 +14,10 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 import com.ssinha.myapp.handler.MyAppHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class MyAppFunction {
 
 	@Autowired
@@ -28,7 +31,7 @@ public class MyAppFunction {
                 authLevel = AuthorizationLevel.ANONYMOUS)
                 HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
-        context.getLogger().info("Java HTTP trigger processed a request.");
+        log.info("Java HTTP trigger processed a request.");
 
         return myAppHandler.apply(request);
     }

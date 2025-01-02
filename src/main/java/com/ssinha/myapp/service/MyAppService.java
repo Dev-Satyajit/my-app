@@ -19,7 +19,7 @@ public class MyAppService {
 
 		String envValue = Runtime.get().getConfiguration("env.name");
 		String testValue = Runtime.get().getConfiguration("test.key");
-		String secretValue = Runtime.get().getConfiguration("test.secret");
+		String secretValue = Runtime.get().getConfiguration("test.secret@secure");
 
 		if (name == null) {
 			return request.createResponseBuilder(HttpStatus.BAD_REQUEST)

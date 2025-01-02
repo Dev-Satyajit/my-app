@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+	<entry key="keyVault_base_url">https://ssappsprv-ci-kv-d.vault.azure.net</entry>
+	<entry key="keyVault_tenant">dfe59b67-7a96-4bef-a4bc-4881ca529750</entry>
+	<entry key="keyVault_clientId">57140830-8dcb-4fb9-bb3f-14c546b04b12</entry>
+	<entry key="keyVault_clientKey">to be replaced</entry>
 	<entry key="env.name">to be replaced</entry>
 	<entry key="test.key">to be replaced</entry>
-	<entry key="test.secret">to be replaced</entry>
+	<entry key="test.secret@secure">d-myapp-secret</entry>
+	<entry key="test.secret-qa@secure">r-myapp-secret</entry>
 </properties>
