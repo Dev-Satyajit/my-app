@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Stream;
 
+import com.ssinha.common.keyvault.KeyVaultSecretAccess;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

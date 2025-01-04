@@ -1,4 +1,4 @@
-package com.ssinha.common.config;
+package com.ssinha.common.keyvault;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
