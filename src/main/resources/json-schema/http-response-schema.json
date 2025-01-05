@@ -1,0 +1,23 @@
+{
+	"type": "object",
+	"required": false,
+	"javaType": "com.ssinha.models.MyAppHttpResponse",
+	"additionalProperties": false,
+	"properties": {
+		"envValue": {
+			"type": "string",
+			"description": "Environment name",
+			"required": true
+		},
+		"testValue": {
+			"type": "string",
+			"description": "Test value",
+			"required": true
+		},
+		"secretValue": {
+			"type": "string",
+			"description": "Secret value",
+			"required": true
+		}
+	}
+}
