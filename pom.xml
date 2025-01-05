@@ -21,7 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
 		<azure.functions.maven.plugin.version>1.36.0</azure.functions.maven.plugin.version>
-		<azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
+		<azure.functions.java.library.version>2.2.0</azure.functions.java.library.version>
 		<functionAppName>my-app</functionAppName>
 		<start-class>com.ssinha.myapp.app.Application</start-class>
 	</properties>
@@ -139,7 +139,7 @@
 			<plugin>
 				<groupId>org.jsonschema2pojo</groupId>
 				<artifactId>jsonschema2pojo-maven-plugin</artifactId>
-				<version>1.0.2</version>
+				<version>1.2.2</version>
 				<executions>
 					<execution>
 						<id>from-schema</id>
