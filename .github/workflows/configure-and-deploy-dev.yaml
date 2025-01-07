@@ -65,7 +65,7 @@ jobs:
             mkdir -p package
             cp -r */azure-functions package/
             cp -r artifacts package/
-            cp -r pox.xml package/
+            cp -r pom.xml package/
             zip -r my_archive.zip package/
             echo "PACKAGE_PATH=my_archive.zip" >> $GITHUB_ENV
 
