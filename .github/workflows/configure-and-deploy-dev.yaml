@@ -63,7 +63,9 @@ jobs:
       - name: Create Package
         run: |
             mkdir -p package
-            find target -type f -exec cp {} package/ \;
+            cp */azure-functions package/
+            cp artifacts package/
+            cp pox.xml package/
             zip -r my_archive.zip package/
             echo "PACKAGE_PATH=my_archive.zip" >> $GITHUB_ENV
 
