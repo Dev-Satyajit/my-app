@@ -52,7 +52,7 @@ jobs:
             pom.xml
 
       - name: Get Current Date
-        run: echo "date=$(date +'%Y%m%d/%H-%M-%S')" >> $GITHUB_ENV
+        run: echo "date=(Get-Date).ToString('yyyyMMdd-hhmmss')" >> $GITHUB_ENV
 
       - name: Create Release
         env:
