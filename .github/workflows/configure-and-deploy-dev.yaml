@@ -26,7 +26,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: SATYAJIT-PC
 
     steps:
       - name: 'Checkout GitHub Action'
