@@ -14,4 +14,4 @@ $secretId = az keyvault secret show -n $secretName --vault-name $keyvaultname --
 $principalId = az functionapp identity show -n $AppName -g $AppResourceGroupName --query principalId -o tsv
 
 az keyvault set-policy -n $keyvaultname -g $keyvaultRg --object-id $principalId --secret-permissions get
-az functionapp config appsettings set -n $AppName -g $AppResourceGroupName --settings "keyVault_clientKey=@Microsoft.KeyVault(SecretUri=$secretId^^)"
+az functionapp config appsettings set -n $AppName -g $AppResourceGroupName --settings "keyVault_clientKey=@Microsoft.KeyVault(SecretUri=$secretId)"
