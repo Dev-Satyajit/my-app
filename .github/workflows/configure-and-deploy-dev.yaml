@@ -60,6 +60,19 @@ jobs:
         run: |
           gh release create ${{ env.date }}
 
+      - name: Create Package
+        run: |
+            mkdir -p package
+            find target -type f -exec cp {} package/ \;
+            zip -r my_archive.zip package/
+            echo "PACKAGE_PATH=my_archive.zip" >> $GITHUB_ENV
+
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run:
+          gh release upload ${{ env.date }} ${{ env.PACKAGE_PATH }}
+
   deploy:
     needs: [build]
     runs-on: ubuntu-latest
