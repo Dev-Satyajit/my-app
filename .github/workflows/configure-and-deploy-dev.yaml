@@ -3,7 +3,6 @@ name: Dev > Configure, build and deploy to Azure Functions
 on:
   push:
     branches:
-      - feature*
       - develop
 
   workflow_dispatch:
