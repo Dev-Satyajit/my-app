@@ -81,7 +81,6 @@ jobs:
   Deploy:
     needs: [build]
     runs-on: ubuntu-latest
-    if: ${{ GITHUB.REF_NAME }} == 'develop'
     environment:
       name: dev
 
