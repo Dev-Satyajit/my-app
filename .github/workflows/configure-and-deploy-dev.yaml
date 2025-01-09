@@ -15,7 +15,7 @@ env:
   JAVA_VERSION: '17' # set this to the java version to use
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-24.04
 
     steps:
@@ -63,7 +63,7 @@ jobs:
         run:
           gh release upload ${{ env.date }} ${{ env.PACKAGE_PATH }}
 
-  Deploy:
+  deploy:
     needs: [build]
     runs-on: ubuntu-24.04
     environment:
