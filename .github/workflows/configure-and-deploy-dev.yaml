@@ -40,13 +40,8 @@ jobs:
             infrastructure_changed.txt
             pom.xml
 
-      - name: Set Time Zone
-        uses: szenius/set-timezone@v2.0
-        with:
-          timezoneLinux: "Asia/Kolkata"
-
       - name: Get Current Date Time
-        run: echo "DATE_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        run: echo "DATE_TIME=$(TZ=":Asia/Kolkata" date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
       - name: Create Release
         env:
