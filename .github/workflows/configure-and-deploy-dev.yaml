@@ -3,7 +3,6 @@ name: Dev > Configure, build and deploy to Azure Functions
 on:
   push:
     branches:
-      - feature*
       - develop
 
   workflow_dispatch:
@@ -15,14 +14,14 @@ env:
   JAVA_VERSION: '17' # set this to the java version to use
 
 jobs:
-  Build:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-24.04
 
     steps:
-      - name: 'Checkout GitHub Action'
+      - name: Checkout GitHub Action
         uses: actions/checkout@v4
 
-      - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
+      - name: Setup JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           distribution: ${{ env.DISTRIBUTION }}
@@ -31,8 +30,8 @@ jobs:
       - name: Build Maven
         run: mvn clean package
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: my-artifact
           path: |
@@ -41,14 +40,14 @@ jobs:
             infrastructure_changed.txt
             pom.xml
 
-      - name: Get Current Date
-        run: echo "date=$(date +'%Y%m%d/%H-%M-%S')" >> $GITHUB_ENV
+      - name: Get Current Date Time
+        run: echo "DATE_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create ${{ env.date }}
+          gh release create RELEASE-${{ env.DATE_TIME }}
 
       - name: Create Package
         run: |
@@ -61,17 +60,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run:
-          gh release upload ${{ env.date }} ${{ env.PACKAGE_PATH }}
+          gh release upload RELEASE-${{ env.DATE_TIME }} ${{ env.PACKAGE_PATH }}
 
-  Deploy:
+  deploy:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: dev
 
     steps:
       - name: Download Artifact 
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: my-artifact
 
@@ -116,7 +115,7 @@ jobs:
           inlineScript: ./artifacts/scripts/actions/Function_AddAppSettings.ps1
             ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.COMMA_SEPARATED_VALUE }}
 
-      - name: 'Run Azure Functions Action'
+      - name: Run Azure Functions Action
         uses: Azure/functions-action@v1
         id: fa-dev
         with:

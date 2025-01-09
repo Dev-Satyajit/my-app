@@ -31,15 +31,7 @@ public class MyAppFunction {
                 authLevel = AuthorizationLevel.ANONYMOUS)
                 HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
-		log.info("Java HTTP trigger processed a request.");
-		log.info("Printing environment variables...");
-		System.getenv().forEach((k, v) -> {
-			log.info("{} = {}", k, v);
-		});
-		log.info("Printing system properties...");
-		System.getProperties().forEach((k, v) -> {
-			log.info("{} = {}", k, v);
-		});
+		log.info("Java HTTP trigger is processing a request...");
 
         return myAppHandler.apply(request);
     }
