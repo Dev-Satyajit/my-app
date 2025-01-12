@@ -80,7 +80,7 @@
 				"description": "Environment where the code is running"
 			}
 		},
-		"linuxFxVersion": {
+		"javaVersion": {
 			"type": "string",
 			"metadata": {
 				"description": "Java version for the function app"
@@ -109,11 +109,11 @@
 			}
 		},
 		{
-			"apiVersion": "2022-03-01",
 			"type": "Microsoft.Web/sites",
+			"apiVersion": "2018-11-01",
 			"name": "[parameters('function_app_name')]",
 			"location": "[resourceGroup().location]",
-			"kind": "functionapp,linux",
+			"kind": "functionapp",
 			"identity": {
 				"type": "SystemAssigned"
 			},
@@ -128,8 +128,9 @@
 				"virtualNetworkSubnetId": null,
 				"publicNetworkAccess": "Enabled",
 				"siteConfig": {
+					"netFrameworkVersion": "v6.0",
 					"siteAuthEnabled": true,
-					"linuxFxVersion": "[parameters('javaVersion')]",
+					"javaVersion": "[parameters('javaVersion')]",
 					"appSettings": [
 						{
 							"name": "AzureWebJobsStorage",

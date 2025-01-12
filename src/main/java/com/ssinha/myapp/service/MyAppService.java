@@ -18,9 +18,9 @@ public class MyAppService {
 		final String query = request.getQueryParameters().get("name");
 		final String name = request.getBody().orElse(query);
 
-		String envValue = Runtime.get().getConfiguration("env.name");
-		String testValue = Runtime.get().getConfiguration("test.key");
-		String secretValue = Runtime.get().getConfiguration("test.secret@secure");
+		String envValue = Runtime.get().getConfiguration("env_name");
+		String testValue = Runtime.get().getConfiguration("test_key");
+		String secretValue = Runtime.get().getConfiguration("test_secret@secure");
 
 		MyAppHttpResponse response = new MyAppHttpResponse();
 		response.setEnvValue(envValue);

@@ -90,14 +90,6 @@ jobs:
           azPSVersion: "latest"
           inlineScript: ./artifacts/scripts/actions/Common_SetupReleaseVariables.ps1 ${{ vars.ENV_IDENTIFIER }} ${{ vars.ENV_NETWORK_IDENTIFIER }} ${{ vars.CLOUD_LOCATION }} ${{ vars.FUNC_MYAPP_NAME }} .
 
-      - name: App Service Plan Deploy
-        uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
-          resourceGroupName: common-${{ vars.CLOUD_LOCATION }}-rg-${{ vars.ENV_IDENTIFIER }}
-          template: ./artifacts/templates/arm/app-service-plan.json
-          parameters: ./artifacts/templates/params/d/app-service-plan-parameters.json.tmp
-
       - name: Storage Account Deploy
         uses: azure/arm-deploy@v1
         with:
@@ -111,8 +103,8 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }}
-          template: ./artifacts/templates/arm/function-app.json
-          parameters: ./artifacts/templates/params/d/function-app-parameters.json.tmp
+          template: ./artifacts/templates/arm/function-app-linux.json
+          parameters: ./artifacts/templates/params/d/function-app-parameters-linux.json.tmp
 
       - name: Key Vault Integration
         uses: azure/powershell@v2
