@@ -27,14 +27,15 @@
 			"name": "[parameters('app_service_plan_name')]",
 			"type": "Microsoft.Web/serverfarms",
 			"location": "[resourceGroup().location]",
-			"kind": "",
+			"kind": "linux",
 			"tags": {},
 			"dependsOn": [],
 			"properties": {
 				"name": "[parameters('app_service_plan_name')]",
 				"workerSize": "[parameters('worker_size')]",
 				"workerSizeId": "[parameters('worker_size_id')]",
-				"numberOfWorkers": "[parameters('number_of_workers')]"
+				"numberOfWorkers": "[parameters('number_of_workers')]",
+				"reserved": true
 			},
 			"sku": {
 				"Tier": "[parameters('sku')]",

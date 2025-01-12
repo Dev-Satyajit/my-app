@@ -90,6 +90,14 @@ jobs:
           azPSVersion: "latest"
           inlineScript: ./artifacts/scripts/actions/Common_SetupReleaseVariables.ps1 ${{ vars.ENV_IDENTIFIER }} ${{ vars.ENV_NETWORK_IDENTIFIER }} ${{ vars.CLOUD_LOCATION }} ${{ vars.FUNC_MYAPP_NAME }} .
 
+      - name: App Service Plan Deploy
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+          resourceGroupName: common-${{ vars.CLOUD_LOCATION }}-rg-${{ vars.ENV_IDENTIFIER }}
+          template: ./artifacts/templates/arm/app-service-plan.json
+          parameters: ./artifacts/templates/params/d/app-service-plan-parameters.json.tmp
+
       - name: Storage Account Deploy
         uses: azure/arm-deploy@v1
         with:

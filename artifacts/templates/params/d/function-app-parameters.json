@@ -54,9 +54,9 @@
             "type": "string",
             "value": "$(TARGET_APP_SERVICE_ENVIRONMENT)"
         },
-		"javaVersion": {
+		"linuxFxVersion": {
 			"type": "string",
-			"value": "17"
+			"value": "Java|17"
 		}
     },
     "resources": [
