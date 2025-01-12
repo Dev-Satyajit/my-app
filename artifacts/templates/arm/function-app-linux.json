@@ -163,14 +163,6 @@
 						{
 							"name": "runtime_environment",
 							"value": "[parameters('application_runtime_environment')]"
-						},
-						{
-						    "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-						    "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storage_account_name'),';AccountKey=',listKeys(variables('storageAccountid'),'2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
-						},
-						{
-						    "name": "WEBSITE_CONTENTSHARE",
-						    "value": "[variables('contentShare')]"
 						}
 					],
 					"cors": {
