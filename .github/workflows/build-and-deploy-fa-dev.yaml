@@ -64,7 +64,6 @@ jobs:
         id: fa-dev
         with:
           app-name: ${{ env.TARGET_APP_SERVICE_NAME }}
-          slot-name: green
           package: ${{ env.PACKAGE_DIRECTORY }}
           # publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           respect-pom-xml: true
