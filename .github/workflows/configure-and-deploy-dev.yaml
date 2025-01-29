@@ -47,7 +47,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create RELEASE-${{ env.DATE_TIME }} --generate-notes
+          changelog generate
+          gh release create RELEASE-${{ env.DATE_TIME }} -F CHANGELOG.md
 
       # - name: Create Package
       #   run: |
