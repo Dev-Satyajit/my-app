@@ -40,14 +40,14 @@ jobs:
             infrastructure_changed.txt
             pom.xml
 
-      # - name: Get Current Date Time
-      #   run: echo "DATE_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+      - name: Get Current Date Time
+        run: echo "DATE_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
-      # - name: Create Release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     gh release create RELEASE-${{ env.DATE_TIME }}
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create RELEASE-${{ env.DATE_TIME }} --generate-notes
 
       # - name: Create Package
       #   run: |
