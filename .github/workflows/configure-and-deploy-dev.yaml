@@ -47,6 +47,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          npm install generate-changelog -g
           changelog generate
           gh release create RELEASE-${{ env.DATE_TIME }} -F CHANGELOG.md
 
