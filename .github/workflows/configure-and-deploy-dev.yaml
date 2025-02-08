@@ -40,11 +40,6 @@ jobs:
             infrastructure_changed.txt
             pom.xml
 
-      - name: Set Time Zone
-        uses: szenius/set-timezone@v2.0
-        with:
-          timezoneLinux: "Asia/Kolkata"
-
       - name: Get Current Date Time
         run: echo "DATE_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
@@ -120,11 +115,21 @@ jobs:
           inlineScript: ./artifacts/scripts/actions/Function_AddAppSettings.ps1
             ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} ${{ env.TARGET_APP_SERVICE_NAME }} ${{ vars.COMMA_SEPARATED_VALUE }}
 
+      - name: Create Staging Slot
+        run: az functionapp deployment slot create --name ${{ env.TARGET_APP_SERVICE_NAME }} --resource-group ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} --slot staging
+
+      - name: Swap Slot
+        run: az functionapp deployment slot swap -g ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} -n ${{ env.TARGET_APP_SERVICE_NAME }} --slot staging --target-slot production
+
+      - name: Delete Staging Slot
+        run: az functionapp deployment slot delete --name ${{ env.TARGET_APP_SERVICE_NAME }} --resource-group ${{ env.TARGET_APP_SERVICE_RESOURCE_GROUP }} --slot staging
+
       - name: Run Azure Functions Action
         uses: Azure/functions-action@v1
         id: fa-dev
         with:
           app-name: ${{ env.TARGET_APP_SERVICE_NAME }}
+          slot-name: staging
           package: ${{ env.PACKAGE_DIRECTORY }}
           # publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           respect-pom-xml: true
