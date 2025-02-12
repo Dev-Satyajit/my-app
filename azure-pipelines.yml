@@ -9,19 +9,21 @@ pool:
   vmImage: windows-latest
 
 steps:
-  - task: Maven@4
-    displayName: '01 || Build Maven'
+
+  - task: DownloadSecureFile@1
+    displayName: 01 | download maven settings file
+    name: settingsxml
     inputs:
-      mavenPomFile: 'pom.xml'
-      goals: 'clean package'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.17'
-      mavenVersionOption: 'Default'
-      mavenAuthenticateFeed: false
-      effectivePomSkip: false
-      sonarQubeRunAnalysis: false
+      secureFile: 'settings.xml'
+
+   
+  - task: PowerShell@2
+    displayName: 02 | configure maven settings
+    inputs:
+      targetType: 'inline'
+      script: |
+        New-Item -Type Directory -Force "${HOME}/.m2"
+        Copy-Item -Force "$(settingsxml.secureFilePath)" "${HOME}/.m2/settings.xml"
 
   - task: CopyFiles@2
     displayName: '02 || Copy Files'
@@ -31,8 +33,15 @@ steps:
         **/artifacts/**
         **/azure-functions/**
         pom.xml
+        settings.xml
       TargetFolder: $(Build.ArtifactStagingDirectory)
       OverWrite: true
+
+  - task: PowerShell@2
+    displayName: 02 | configure maven settings
+    inputs:
+      targetType: 'inline'
+      script: Copy-Item -Force "$(settingsxml.secureFilePath)" $(Build.ArtifactStagingDirectory)
 
   - task: PublishBuildArtifacts@1
     displayName: '03 || Publish Build Artifacts'
